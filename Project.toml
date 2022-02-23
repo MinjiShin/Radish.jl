@@ -1,6 +1,6 @@
 name = "Radish"
-uuid = "154c3855-1f1e-46e8-b837-ca60023b1bfc"
-authors = ["Kyungdahm Yun <tomyun@gmail.com>"]
+uuid = "7443e5a3-f8f8-42dc-9a83-aad127a86cb2"
+authors = ["MinjiShin <ooorora@naver.com>"]
 version = "0.1.22-DEV"
 
 [deps]
