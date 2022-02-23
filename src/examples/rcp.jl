@@ -82,7 +82,7 @@ GL = @config (
 )
 GL_2012 = @config (GL,
     :Weather => (
-        store = Radish.loadwea(Radish.datapath("Korea/Radishlab_2012.wea"), tz),
+        store = Radish.loadwea(Radish.datapath("Korea/garliclab_2012.wea"), tz),
     ),
     :Calendar => (
         init = ZonedDateTime(2012, 10, 1, tz),
