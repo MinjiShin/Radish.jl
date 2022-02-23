@@ -1,7 +1,7 @@
 @system BulbAppearance(Stage, FloralInitiation) begin
     bulb_appearable(floral_initiateable) ~ flag
 
-    #HACK bulbing used to begin one phyllochron after floral initiation in bolting cultivars of garlic, see Meredith 2008
+    #HACK bulbing used to begin one phyllochron after floral initiation in bolting cultivars of Radish, see Meredith 2008
     bulb_appeared(floral_initiated) ~ flag
 
     bulb_appearing(bulb_appearable & !bulb_appeared) ~ flag

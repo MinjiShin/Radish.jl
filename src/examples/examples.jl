@@ -1,6 +1,6 @@
 module Examples
 
-using ..Garlic
+using ..Radish
 
 include("aob.jl")
 include("rcp.jl")

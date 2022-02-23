@@ -1,7 +1,7 @@
 module AoB
 
 using Cropbox
-using ..Garlic
+using ..Radish
 using TimeZones
 
 ND = @config (
@@ -9,7 +9,7 @@ ND = @config (
         :init => ZonedDateTime(2007, 9, 1, tz"Asia/Seoul"),
         :last => ZonedDateTime(2008, 8, 31, tz"Asia/Seoul"),
     ),
-    :Weather => (:store => Garlic.loadwea(Garlic.datapath("2007.wea"), tz"Asia/Seoul")),
+    :Weather => (:store => Radish.loadwea(Radish.datapath("2007.wea"), tz"Asia/Seoul")),
     :Phenology => (:planting_date => ZonedDateTime(2007, 11, 1, tz"Asia/Seoul")),
 )
 
@@ -41,7 +41,7 @@ KMSP = @config (
         synthesis_efficiency = 0.8, # Yg
         partitioning_table = [
         # root leaf sheath scape bulb
-          0.00 0.00   0.00  0.00 0.00 ; # seed garlic before germination
+          0.00 0.00   0.00  0.00 0.00 ; # seed Radish before germination
           0.35 0.30   0.25  0.00 0.10 ; # vegetative stage between germination and scape initiation
           0.15 0.15   0.10  0.25 0.35 ; # period between scape initiation and scape appearance
           0.05 0.10   0.00  0.35 0.50 ; # period after scape appearance before removal (scape stays intact)
@@ -78,7 +78,7 @@ CUH = @config (
 )
 CUH_2013 = @config (CUH, (
     :Weather => (
-        store = Garlic.loadwea(Garlic.datapath("CUH/2013.wea"), tz),
+        store = Radish.loadwea(Radish.datapath("CUH/2013.wea"), tz),
     ),
     :Calendar => (
         init = ZonedDateTime(2013, 10, 30, tz), # Y1 bgn
@@ -90,7 +90,7 @@ CUH_2013 = @config (CUH, (
 ))
 CUH_2014 = @config (CUH, (
     :Weather => (
-        store = Garlic.loadwea(Garlic.datapath("CUH/2014.wea"), tz),
+        store = Radish.loadwea(Radish.datapath("CUH/2014.wea"), tz),
     ),
     :Calendar => (
         # 2014.wea starts from 2014-09-01 01:00, not 00:00
@@ -185,7 +185,7 @@ using DataFrames
 using DataFramesMeta
 import Dates
 loaddata(cv, y, p) = begin
-    ps = CSV.File(Garlic.datapath("CUH/PhenologySummary.csv")) |> DataFrame |> unitfy
+    ps = CSV.File(Radish.datapath("CUH/PhenologySummary.csv")) |> DataFrame |> unitfy
     @chain ps begin
         @subset(:cultivar .== cv, :year .== y, :planting_group .== p)
         @select(:DAP, :leaves)
@@ -196,8 +196,8 @@ calibrate_LTAR(cv, y, p) = begin
     c = eval(Symbol("$(cv)_$(y)_P$(p)_SR0")) #HACK for now
     obs = loaddata(cv, y, p)
     f(s) = s.DAP' in obs.DAP && Dates.hour(s.calendar.time') == 12
-    #r = simulate(Garlic.Model;
-    calibrate(Garlic.Model, obs;
+    #r = simulate(Radish.Model;
+    calibrate(Radish.Model, obs;
         config=c,
         stop="calendar.count",
         index=:DAP,

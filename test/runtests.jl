@@ -1,12 +1,12 @@
 using Cropbox
-using Garlic
+using Radish
 using Test
 
 import Dates
 
-@testset "garlic" begin
-    r = simulate(Garlic.Model;
-        config=Garlic.Examples.AoB.KM_2014_P2_SR0,
+@testset "Radish" begin
+    r = simulate(Radish.Model;
+        config=Radish.Examples.AoB.KM_2014_P2_SR0,
         stop="calendar.count",
         snap=s -> Dates.hour(s.calendar.time') == 12,
     )

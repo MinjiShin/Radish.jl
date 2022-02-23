@@ -33,7 +33,7 @@
     end ~ accumulate(init=initial_seed_mass, u"g")
 
     #stem(x=NU["*"].stem.mass) => begin # for maize
-    total_sheath_mass(x=NU["*"].sheath.mass) => begin # for garlic
+    total_sheath_mass(x=NU["*"].sheath.mass) => begin # for Radish
         # dt the addition of C_reserve here only serves to maintain a total for the mass. It could have just as easily been added to total mass.
         # C_reserve is added to stem here to represent soluble TNC, SK
         #sum(typeof(0.0u"g")[nu.stem.mass' for nu in NU]) + self.p.carbon.reserve
@@ -69,7 +69,7 @@
 
     # ear_mass(ear.mass) ~ track(u"g")
 
-    # for garlic
+    # for Radish
 
     root_mass(root_carbon) ~ accumulate(u"g")
     leaf_mass(leaf_carbon) ~ accumulate(u"g")
@@ -91,7 +91,7 @@
     shoot_mass(seed_mass, stalk_mass, leaf_mass, bulb_mass) => begin
         # for maize
         #seed_mass + stem_mass + leaf_mass + ear_mass
-        # for garlic
+        # for Radish
         seed_mass + stalk_mass + leaf_mass + bulb_mass
     end ~ track(u"g")
 

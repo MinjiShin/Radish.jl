@@ -45,7 +45,7 @@ end
         #1
         # leaf angle factor for corn leaves, Campbell and Norman (1998)
         #1.37
-        # leaf angle factor for garlic canopy, from Rizzalli et al. (2002),  X factor in Campbell and Norman (1998)
+        # leaf angle factor for Radish canopy, from Rizzalli et al. (2002),  X factor in Campbell and Norman (1998)
         0.7
     end ~ preserve(parameter)
 

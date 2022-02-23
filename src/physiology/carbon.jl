@@ -110,7 +110,7 @@ end
         #agefn = (self.p.area.green_leaf + 1) / (self.p.area.leaf + 1)
         # no maint cost for dead materials but needs to be more mechanistic, SK
         #agefn = 1.0
-        # from garlic model
+        # from Radish model
         #agefn = (self.p.area.green_leaf + 0.1) / (self.p.area.leaf + 0.1)
         green_leaf_ratio
     end ~ track
@@ -139,7 +139,7 @@ end
 
     pt: partitioning_table => [
         # root leaf sheath scape bulb
-          0.00 0.00   0.00  0.00 0.00 ; # seed garlic before germination
+          0.00 0.00   0.00  0.00 0.00 ; # seed Radish before germination
           0.35 0.30   0.25  0.00 0.10 ; # vegetative stage between germination and scape initiation
           0.15 0.15   0.10  0.25 0.35 ; # period between scape initiation and scape appearance
           0.05 0.10   0.00  0.35 0.50 ; # period after scape appearance before removal (scape stays intact)

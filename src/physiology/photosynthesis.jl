@@ -21,7 +21,7 @@
     leaf_width => begin
         # to be calculated when implemented for individal leaves
         #5.0 # for maize
-        1.5 # for garlic
+        1.5 # for Radish
     end ~ preserve(u"cm", parameter)
 
     #TODO how do we get LeafWP and ET_supply?

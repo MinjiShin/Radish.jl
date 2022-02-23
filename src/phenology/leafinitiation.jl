@@ -14,13 +14,13 @@
 
     leaf_initiation(r=LIR_max, β=BF.ΔT) => r*β ~ accumulate(when=leaf_initiating)
 
-    #HACK original garlic model assumed leaves are being initiated when the seeds are sown
+    #HACK original Radish model assumed leaves are being initiated when the seeds are sown
     #HACK maize model model assumed leaf initiation begins when germination is over
     leaf_initiateable(planted) ~ flag
 
     # for maize
     #leaf_initiated(pheno.tassel_initiation.over) ~ flag
-    # for garlic
+    # for Radish
     leaf_initiated(floral_initiated) ~ flag
 
     leaf_initiating(leaf_initiateable & !leaf_initiated) ~ flag

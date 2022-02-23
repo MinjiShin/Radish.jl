@@ -1,7 +1,7 @@
 module RCP
 
 using Cropbox
-using ..Garlic
+using ..Radish
 using TimeZones
 using Dates
 using Interpolations: LinearInterpolation
@@ -35,7 +35,7 @@ KMSP = @config (
         synthesis_efficiency = 0.8, # Yg
         partitioning_table = [
         # root leaf sheath scape bulb
-          0.00 0.00   0.00  0.00 0.00 ; # seed garlic before germination
+          0.00 0.00   0.00  0.00 0.00 ; # seed Radish before germination
           0.35 0.30   0.25  0.00 0.10 ; # vegetative stage between germination and scape initiation
           0.15 0.15   0.10  0.25 0.35 ; # period between scape initiation and scape appearance
           0.05 0.10   0.00  0.35 0.50 ; # period after scape appearance before removal (scape stays intact)
@@ -66,7 +66,7 @@ ND = @config (KMSP,
         synthesis_efficiency = 0.75,
         partitioning_table = [
         # root leaf sheath scape bulb
-          0.00 0.00   0.00  0.00 0.00 ; # seed garlic before germination
+          0.00 0.00   0.00  0.00 0.00 ; # seed Radish before germination
           0.35 0.30   0.25  0.00 0.10 ; # vegetative stage between germination and scape initiation
           0.15 0.15   0.10  0.25 0.35 ; # period between scape initiation and scape appearance
           0.05 0.10   0.00  0.35 0.50 ; # period after scape appearance before removal (scape stays intact)
@@ -82,21 +82,21 @@ GL = @config (
 )
 GL_2012 = @config (GL,
     :Weather => (
-        store = Garlic.loadwea(Garlic.datapath("Korea/garliclab_2012.wea"), tz),
+        store = Radish.loadwea(Radish.datapath("Korea/Radishlab_2012.wea"), tz),
     ),
     :Calendar => (
         init = ZonedDateTime(2012, 10, 1, tz),
         last = ZonedDateTime(2013, 6, 30, tz),
     ),
 )
-ND_GL_2012 = let planting_date = Garlic.date(2012, 10, 4; tz)
+ND_GL_2012 = let planting_date = Radish.date(2012, 10, 4; tz)
     @config (
         ND, GL_2012,
         :Phenology => (;
             planting_date,
             scape_removal_date = nothing,
             harvest_date = ZonedDateTime(2013, 6, 15, tz),
-            storage_days = Garlic.storagedays(planting_date),
+            storage_days = Radish.storagedays(planting_date),
         )
     )
 end
@@ -107,7 +107,7 @@ JS = @config (
 )
 JS_2009 = @config (JS,
     :Weather => (
-        store = Garlic.loadwea(Garlic.datapath("Korea/184_2009.wea"), tz),
+        store = Radish.loadwea(Radish.datapath("Korea/184_2009.wea"), tz),
     ),
     :Calendar => (
         init = ZonedDateTime(2009, 9, 1, tz),
@@ -121,7 +121,7 @@ ND_JS_2009 = let planting_date = ZonedDateTime(2009, 9, 15, tz)
             planting_date,
             scape_removal_date = ZonedDateTime(2010, 5, 1, tz),
             harvest_date = ZonedDateTime(2010, 6, 18, tz),
-            storage_days = Garlic.storagedays(planting_date),
+            storage_days = Radish.storagedays(planting_date),
         )
     )
 end
@@ -132,7 +132,7 @@ RICCA = @config (
 )
 RICCA_2014 = @config (JS,
     :Weather => (
-        store = Garlic.loadwea(Garlic.datapath("Korea/184_2014.wea"), tz),
+        store = Radish.loadwea(Radish.datapath("Korea/184_2014.wea"), tz),
     ),
     :Calendar => (
         init = ZonedDateTime(2014, 10, 1, tz),
@@ -146,7 +146,7 @@ ND_RICCA_2014 = let planting_date = ZonedDateTime(2014, 10, 8, tz)
             planting_date,
             scape_removal_date = nothing,
             harvest_date = ZonedDateTime(2015, 6, 19, tz),
-            storage_days = Garlic.storagedays(planting_date),
+            storage_days = Radish.storagedays(planting_date),
         )
     )
 end
@@ -187,8 +187,8 @@ korea_config(; config=(), tz=tz, kw...) = _korea_config(; config, meta=kw, tz, k
 _korea_config(; config=(), meta=(), tz=tz, station, year, sowing_day, emergence_day, scape_removal_day) = begin
     latlongs = LATLONGS[station]
     name = "$(station)_$(year)"
-    weaname = Garlic.datapath("Korea/$name.wea")
-    garlic_config(; config, meta, tz, latlongs..., weaname, year, sowing_day, emergence_day, scape_removal_day)
+    weaname = Radish.datapath("Korea/$name.wea")
+    Radish_config(; config, meta, tz, latlongs..., weaname, year, sowing_day, emergence_day, scape_removal_day)
 end
 
 rcp_co2(scenario, year) = begin
@@ -210,20 +210,20 @@ rcp_config(; config=(), tz=tz, kw...) = _rcp_config(; config, meta=kw, tz, kw...
 _rcp_config(; config=(), meta=(), tz=tz, scenario, station, year, repetition, sowing_day, emergence_day, scape_removal_day) = begin
     latlongs = LATLONGS[station]
     name = "$(scenario)_$(station)_$(year)_$(repetition)"
-    weaname = Garlic.datapath("RCP/$name.wea")
+    weaname = Radish.datapath("RCP/$name.wea")
     CO2 = rcp_co2(scenario, year)
-    garlic_config(; config, meta, tz, latlongs..., weaname, CO2, year, sowing_day, emergence_day, scape_removal_day)
+    Radish_config(; config, meta, tz, latlongs..., weaname, CO2, year, sowing_day, emergence_day, scape_removal_day)
 end
 
-garlic_config(; config=(), meta=(), tz=tz, latitude, longitude, altitude=20, weaname, CO2=390, year, sowing_day, emergence_day, scape_removal_day) = begin
-    start_date = Garlic.date(year, 9, 1; tz)
-    end_date = Garlic.date(year+1, 6, 30; tz)
+Radish_config(; config=(), meta=(), tz=tz, latitude, longitude, altitude=20, weaname, CO2=390, year, sowing_day, emergence_day, scape_removal_day) = begin
+    start_date = Radish.date(year, 9, 1; tz)
+    end_date = Radish.date(year+1, 6, 30; tz)
 
-    planting_date = Garlic.date(year, sowing_day; tz)
+    planting_date = Radish.date(year, sowing_day; tz)
     emergence_date = isnothing(emergence_day) ? nothing : planting_date + Day(emergence_day)
-    scape_removal_date = Garlic.date(year, scape_removal_day; tz)
-    harvest_date = Garlic.date(year+1, 5, 15; tz)
-    storage_days = Garlic.storagedays(planting_date)
+    scape_removal_date = Radish.date(year, scape_removal_day; tz)
+    harvest_date = Radish.date(year+1, 5, 15; tz)
+    storage_days = Radish.storagedays(planting_date)
 
     @config (ND,
         :Location => (;
@@ -232,7 +232,7 @@ garlic_config(; config=(), meta=(), tz=tz, latitude, longitude, altitude=20, wea
             altitude,
         ),
         :Weather => (;
-            store = Garlic.loadwea(weaname, tz),
+            store = Radish.loadwea(weaname, tz),
             CO2,
         ),
         :Calendar => (;
@@ -253,9 +253,9 @@ end
 
 #setting = (; scenario=:RCP45, station=165, year=2021, repetition=1, sowing_day=250, scape_removal_day=nothing)
 
-garlic_simulate(; config, target) = begin
+Radish_simulate(; config, target) = begin
     callback(s) = s.calendar.time' == s.config[:Phenology][:harvest_date]
-    simulate(Garlic.Model; config, target, meta=:Meta, stop=callback, snap=callback, verbose=false)
+    simulate(Radish.Model; config, target, meta=:Meta, stop=callback, snap=callback, verbose=false)
 end
 
 rcp_settings = (;
@@ -276,7 +276,7 @@ normal_settings = (;
     emergence_day = [nothing, 1, 7, 14],
     scape_removal_day = [1],
 )
-rcp_run(; configurator=rcp_config, settings=rcp_settings, kw...) = garlic_run(; configurator, settings, kw...)
+rcp_run(; configurator=rcp_config, settings=rcp_settings, kw...) = Radish_run(; configurator, settings, kw...)
 
 korea_settings = (;
     station = [185, 101], # Gosan, Chuncheon
@@ -285,16 +285,16 @@ korea_settings = (;
     emergence_day = [nothing, 1, 7, 14],
     scape_removal_day = [1],
 )
-korea_run(; configurator=korea_config, settings=korea_settings, kw...) = garlic_run(; configurator, settings, kw...)
+korea_run(; configurator=korea_config, settings=korea_settings, kw...) = Radish_run(; configurator, settings, kw...)
 
-garlic_compose(; config=(), configurator, settings) = begin
+Radish_compose(; config=(), configurator, settings) = begin
     K = keys(settings)
     V = values(settings)
     P = Iterators.product(V...) |> collect
     [configurator(; config, zip(K, p)...) for p in P]
 end
 
-garlic_run(;
+Radish_run(;
     target=[:bulb_mass, :total_mass, :planting_density, :dry_yield, :fresh_yield, :leaf_area],
     config=(),
     configurator,
@@ -302,7 +302,7 @@ garlic_run(;
     cache=nothing,
     verbose=true,
 ) = begin
-    C = garlic_compose(; config, configurator, settings)
+    C = Radish_compose(; config, configurator, settings)
     n = length(C)
     R = isnothing(cache) ? Vector(undef, n) : cache
     @assert length(R) == n
@@ -311,7 +311,7 @@ garlic_run(;
     try
         Threads.@threads for i in 1:n
             config = C[i]
-            !isassigned(R, i) && (R[i] = garlic_simulate(; config, target))
+            !isassigned(R, i) && (R[i] = Radish_simulate(; config, target))
             Cropbox.ProgressMeter.next!(p)
         end
     catch
@@ -321,44 +321,44 @@ garlic_run(;
     reduce(vcat, R)
 end
 
-garlic_run_storage(; configurator, settings, name, kw...) = begin
+Radish_run_storage(; configurator, settings, name, kw...) = begin
     c0 = :Meta => :storage => true
     c1 = (
         :Phenology => :storage_days => 100,
         :Meta => :storage => false,
     )
-    r0 = garlic_run(; configurator, settings, config=c0)
-    bson("garlic_$name-storage-on.bson", df = r0)
-    r1 = garlic_run(; configurator, settings, config=c1)
-    bson("garlic_$name-storage-off.bson", df = r1)
+    r0 = Radish_run(; configurator, settings, config=c0)
+    bson("Radish_$name-storage-on.bson", df = r0)
+    r1 = Radish_run(; configurator, settings, config=c1)
+    bson("Radish_$name-storage-off.bson", df = r1)
     r = [r0; r1]
-    bson("garlic_$name-storage.bson", df = r)
+    bson("Radish_$name-storage.bson", df = r)
 end
 
-#garlic_run_storage(configurator=korea_config, settings=(; korea_settings..., station=[185]), name=:korea)
-#garlic_run_storage(configurator=rcp_config, settings=(; normal_settings..., station=[185]), name=:normal)
-#garlic_run_storage(configurator=rcp_config, settings=(; rcp_settings..., station=[185]), name=:rcp)
+#Radish_run_storage(configurator=korea_config, settings=(; korea_settings..., station=[185]), name=:korea)
+#Radish_run_storage(configurator=rcp_config, settings=(; normal_settings..., station=[185]), name=:normal)
+#Radish_run_storage(configurator=rcp_config, settings=(; rcp_settings..., station=[185]), name=:rcp)
 
-garlic_run_cold(; configurator, settings, name, kw...) = begin
+Radish_run_cold(; configurator, settings, name, kw...) = begin
     c0 = :Meta => :cold => true
     c1 = (
         :Density => :enable_cold_damage => false,
         :LeafColdInjury => :_enable => false,
         :Meta => :cold => false,
     )
-    r0 = garlic_run(; configurator, settings, config=c0)
-    bson("garlic_$name-cold-on.bson", df = r0)
-    r1 = garlic_run(; configurator, settings, config=c1)
-    bson("garlic_$name-cold-off.bson", df = r1)
+    r0 = Radish_run(; configurator, settings, config=c0)
+    bson("Radish_$name-cold-on.bson", df = r0)
+    r1 = Radish_run(; configurator, settings, config=c1)
+    bson("Radish_$name-cold-off.bson", df = r1)
     r = [r0; r1]
-    bson("garlic_$name-cold.bson", df = r)
+    bson("Radish_$name-cold.bson", df = r)
 end
 
-#garlic_run_cold(configurator=korea_config, settings=(; korea_settings..., station=[101]), name=:korea)
-#garlic_run_cold(configurator=rcp_config, settings=(; normal_settings..., station=[101]), name=:normal)
-#garlic_run_cold(configurator=rcp_config, settings=(; rcp_settings..., station=[101]), name=:rcp)
+#Radish_run_cold(configurator=korea_config, settings=(; korea_settings..., station=[101]), name=:korea)
+#Radish_run_cold(configurator=rcp_config, settings=(; normal_settings..., station=[101]), name=:normal)
+#Radish_run_cold(configurator=rcp_config, settings=(; rcp_settings..., station=[101]), name=:rcp)
 
-export garlic_run_storage, garlic_run_cold
+export Radish_run_storage, Radish_run_cold
 export korea_config, korea_settings
 export rcp_config, rcp_settings, normal_settings
 

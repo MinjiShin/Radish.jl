@@ -49,7 +49,7 @@ end
     # leaf lamina width to length ratio
     length_to_width_ratio => begin
         #0.106 # for maize
-        0.05 # for garlic
+        0.05 # for Radish
     end ~ preserve(parameter)
 
     # leaf area coeff with respect to L*W (A_LW)
@@ -76,7 +76,7 @@ end
     extra_leaves(np=potential_leaves, ng=pheno.leaves_generic) => (np - ng) ~ track
 
     k: maximum_length_of_longest_leaf_adjustment => begin
-        # no length adjustment necessary for garlic, unlike MAIZE (KY, 2016-10-12)
+        # no length adjustment necessary for Radish, unlike MAIZE (KY, 2016-10-12)
         # 24.0
         0
     end ~ preserve(u"cm^2", parameter)
@@ -97,13 +97,13 @@ end
 
     area_from_length(; L(u"cm")) => begin
         #HACK ensure zero area for zero length
-        # for garlic, see JH's thesis
+        # for Radish, see JH's thesis
         l = Cropbox.deunitfy(L)
         iszero(l) ? l : 0.639945 + 0.954957l + 0.005920l^2
     end ~ call(u"cm^2")
 
     area_increase_from_length(length) => begin
-        # for garlic, see JH's thesis
+        # for Radish, see JH's thesis
         l = Cropbox.deunitfy(length)
         0.954957 + 2*0.005920l
     end ~ track(u"cm^2")
@@ -142,7 +142,7 @@ end
     GD(potential_length, LER_max): growth_duration => begin
         # shortest possible linear phase duration in physiological time (days instead of GDD) modified
         days = potential_length / LER_max
-        # for garlic
+        # for Radish
         1.5days
     end ~ track(u"d")
 
@@ -163,7 +163,7 @@ end
         # LA_max the area of the largest leaf
         # PotentialArea potential final area of a leaf with rank "n". YY
         #self.maximum_area * self.leaf_number_effect * self.rank_effect(weight=1)
-        # for garlic
+        # for Radish
         area_from_length(potential_length)
     end ~ track(u"cm^2")
 
@@ -212,10 +212,10 @@ end
 
     temperature_effect => begin
         #temperature_effect_func(self.p.pheno.growing_temperature, 18.7, 8.0) # for MAIZSIM
-        #FIXME garlic model uses current temperature, not average growing temperature
-        #temperature_effect_func(self.p.pheno.temperature, self.p.pheno.optimal_temperature, 0) # for garlic
-        #FIXME garlic model does not actually use temperature effect on final leaf size calculation
-        1.0 # for garlic
+        #FIXME Radish model uses current temperature, not average growing temperature
+        #temperature_effect_func(self.p.pheno.temperature, self.p.pheno.optimal_temperature, 0) # for Radish
+        #FIXME Radish model does not actually use temperature effect on final leaf size calculation
+        1.0 # for Radish
     end ~ track
 
     potential_expansion_rate(t=elongation_age, t_e=GD, w_max=potential_area) => begin
@@ -240,7 +240,7 @@ end
         #max(0, maximum_expansion_rate * max(0, (t_e - self.elongation_age) / (t_e - t_m) * (self.elongation_age / t_m)**(t_m / (t_e - t_m))) * self.timestep)
         # for MAIZSIM
         #self.potential_expansion_rate * self.timestep
-        # for garlic
+        # for Radish
         #TODO need common framework dealing with derivatives
         #area_increase_from_length(actual_length_increase)
         area_from_length(length + actual_length_increase) - area
@@ -266,7 +266,7 @@ end
     water_potential_effect(; threshold) => begin
         # for MAIZSIM
         #water_potential_effect_func(soil.WP_leaf_predawn, threshold)
-        # for garlic
+        # for Radish
         1.0
     end ~ call
 
@@ -351,7 +351,7 @@ end
         #     t_m = t_e / 2
         #     r = (1 + (t_e - t) / (t_e - t_m)) * (t / t_e)**(t_e / (t_e - t_m))
         #     clip(r, 0., 1.)
-        # for garlic
+        # for Radish
         if iszero(length)
             0
         else
@@ -410,7 +410,7 @@ end
     aging(mature, physiological_age, SG, maturity) => begin
         # for MAIZSIM
         #active_age >= stay_green_duration
-        # for garlic
+        # for Radish
         mature && physiological_age > SG * maturity
     end ~ flag
 

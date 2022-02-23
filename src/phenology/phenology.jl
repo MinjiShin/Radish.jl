@@ -9,7 +9,7 @@ include("bulbappearance.jl")
 include("scapegrowth.jl")
 include("death.jl")
 
-#TODO make a common class to be shared by Garlic and MAIZSIM
+#TODO make a common class to be shared by Radish and MAIZSIM
 @system Phenology(
     Planting,
     Emergence,
@@ -41,7 +41,7 @@ include("death.jl")
         if leaves_appeared < 9
             #FIXME soil module is not implemented yet
             #T = T_soil
-            #HACK garlic model does not use soil temperature
+            #HACK Radish model does not use soil temperature
             T = T_air
         else
             T = T_air
@@ -58,7 +58,7 @@ include("death.jl")
     BF(context, T, To=T_opt', Tx=T_ceil'): beta_function ~ ::BetaFunction
     Q10(context, T, To=T_opt'): q10_function ~ ::Q10Function
 
-    # garlic
+    # Radish
 
     #FIXME clear definition of bulb maturing
     #bulb_maturing(scape_removed, bulbil_appeared) => (scape_removed || bulbil_appeared) ~ flag
